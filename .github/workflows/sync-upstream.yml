@@ -36,7 +36,7 @@ jobs:
 
           current_tag="$(jq -r '.upstream.tag' nix/package-manifest.json)"
           latest_tag="$(
-            git ls-remote --tags --refs https://github.com/mksglu/context-mode.git 'v*' \
+            git ls-remote --tags --refs https://github.com/RogerNavelsaker/context-mode-mcp.git 'v*' \
               | awk -F/ '{print $3}' \
               | sort -V \
               | tail -n 1
