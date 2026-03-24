@@ -1,0 +1,70 @@
+name: Sync Upstream
+
+on:
+  schedule:
+    - cron: "23 4 * * *"
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Optional upstream tag to sync"
+        required: false
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@v31
+
+      - name: Install Bun
+        uses: oven-sh/setup-bun@v2
+
+      - name: Detect latest upstream tag
+        id: detect
+        run: |
+          set -euo pipefail
+
+          current_tag="$(jq -r '.upstream.tag' nix/package-manifest.json)"
+          latest_tag="$(
+            git ls-remote --tags --refs https://github.com/mksglu/context-mode.git 'v*' \
+              | awk -F/ '{print $3}' \
+              | sort -V \
+              | tail -n 1
+          )"
+
+          if [ -z "$latest_tag" ]; then
+            echo "failed to determine latest upstream tag" >&2
+            exit 1
+          fi
+
+          echo "current_tag=$current_tag" >> "$GITHUB_OUTPUT"
+          echo "latest_tag=$latest_tag" >> "$GITHUB_OUTPUT"
+
+          if [ "$current_tag" = "$latest_tag" ]; then
+            echo "has_update=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_update=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Sync pinned upstream
+        if: github.event_name == 'workflow_dispatch' || steps.detect.outputs.has_update == 'true'
+        run: ./scripts/sync-from-upstream.sh "${{ inputs.tag || steps.detect.outputs.latest_tag }}"
+
+      - name: Stop when upstream is unchanged
+        if: github.event_name != 'workflow_dispatch' && steps.detect.outputs.has_update != 'true'
+        run: |
+          echo "Upstream tag unchanged at ${{ steps.detect.outputs.current_tag }}."
+
+      - name: Build updated package
+        if: github.event_name == 'workflow_dispatch' || steps.detect.outputs.has_update == 'true'
+        run: nix build .#default --accept-flake-config
