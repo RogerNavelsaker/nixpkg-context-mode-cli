@@ -5,8 +5,8 @@
     "version": "1.0.52-p1"
   },
   "package": {
-    "revision": 2,
-    "version": "1.0.52-p1-r2"
+    "revision": 3,
+    "version": "1.0.52-p1-r3"
   },
   "binary": {
     "name": "context-mode-cli",

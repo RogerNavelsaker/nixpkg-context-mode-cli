@@ -65,11 +65,20 @@ stdenv.mkDerivation {
       bin \
       src \
       "$shareRoot"/
+    mkdir -p "$shareRoot/skill"
+    cp ${../skill/SKILL.md} "$shareRoot/skill/SKILL.md"
 
     mkdir -p "$out/bin"
     ln -s ${lib.getExe' bun "bun"} "$out/bin/bun"
-    makeWrapper ${lib.getExe' bun "bun"} "$out/bin/${manifest.binary.name}" \
-      --add-flags "$shareRoot/${manifest.binary.entrypoint}"
+    cat > "$out/bin/${manifest.binary.name}" <<EOF
+#!${stdenv.shell}
+if [ "\$1" = "skill" ]; then
+  cat "$shareRoot/skill/SKILL.md"
+  exit 0
+fi
+exec ${lib.getExe' bun "bun"} "$shareRoot/${manifest.binary.entrypoint}" "\$@"
+EOF
+    chmod +x "$out/bin/${manifest.binary.name}"
 
     runHook postInstall
   '';
