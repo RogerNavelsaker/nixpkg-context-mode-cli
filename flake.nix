@@ -1,5 +1,5 @@
 {
-  description = "Thin Nix packaging repo for the Context Mode MCP server";
+  description = "Thin Nix packaging repo for the Context Mode CLI bridge";
 
   nixConfig = {
     extra-substituters = [
@@ -31,7 +31,7 @@
           inherit system;
           overlays = [ bun2nix.overlays.default ];
           config.allowUnfreePredicate = pkg: builtins.elem (nixpkgs.lib.getName pkg) [
-            "context-mode-mcp"
+            "context-mode-cli"
           ];
         };
       });

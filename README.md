@@ -1,15 +1,15 @@
-# nixpkg-context-mode-mcp
+# nixpkg-context-mode-cli
 
-Thin Nix and Flox packaging repo for the Bun-installable `context-mode-mcp` server package.
+Thin Nix and Flox packaging repo for the Bun-installable `context-mode-cli` bridge package.
 
 This repo should own only reproducible Nix packaging. It should not own Pi-specific install behavior or generic MCP package docs.
 
 ## Current Status
 
-- Exposes the MCP server binary as `context-mode-mcp`
-- Fetches the tagged `context-mode-mcp` source archive from GitHub
+- Exposes the CLI binary as `context-mode-cli`
+- Packages the local `context-mode-cli` source tree
 - Uses the package repo’s Bun lock surface with `bun2nix`
-- Wraps the server with Bun from the Nix store, so Bun does not need to be installed separately in Flox
+- Wraps the CLI with Bun from the Nix store, so Bun does not need to be installed separately in Flox
 - Carries a package revision separate from upstream so Flox can detect packaging-only updates
 
 ## Files
@@ -24,9 +24,9 @@ This repo should own only reproducible Nix packaging. It should not own Pi-speci
 
 ## Direction
 
-The source of truth for this repo is now the `context-mode-mcp` GitHub release stream. Syncing a new version means:
+The source of truth for this repo is the local `context-mode-cli` package repo until it is published. Syncing a new version means:
 
-- cloning the tagged `context-mode-mcp` repo
+- copying the current `context-mode-cli` `bun.lock`
 - copying its `bun.lock`
 - regenerating `bun.nix`
-- pinning the tagged source archive hash in `nix/package-manifest.json`
+- bumping `nix/package-manifest.json`

@@ -1,7 +1,6 @@
 {
   bun,
   bun2nix,
-  fetchFromGitHub,
   lib,
   makeWrapper,
   stdenv,
@@ -9,11 +8,9 @@
 
 let
   manifest = builtins.fromJSON (builtins.readFile ./package-manifest.json);
-  upstreamSrc = fetchFromGitHub {
-    owner = manifest.upstream.owner;
-    repo = manifest.upstream.repo;
-    rev = manifest.upstream.rev;
-    hash = manifest.upstream.hash;
+  upstreamSrc = builtins.path {
+    path = ../upstream;
+    name = "${manifest.binary.name}-src";
   };
   licenseMap = {
     "Elastic-2.0" = lib.licenses.elastic20;
@@ -25,7 +22,7 @@ let
 in
 stdenv.mkDerivation {
   pname = manifest.binary.name;
-  version = manifest.package.version or manifest.upstream.version;
+  version = manifest.package.version or manifest.source.version;
   src = upstreamSrc;
 
   nativeBuildInputs = [
@@ -60,14 +57,13 @@ stdenv.mkDerivation {
     shareRoot="$out/share/${manifest.binary.name}"
     mkdir -p "$shareRoot"
     cp \
-      .mcp.json \
       README.md \
       bun.lock \
       package.json \
       "$shareRoot"/
     cp -R \
       bin \
-      scripts \
+      src \
       "$shareRoot"/
 
     mkdir -p "$out/bin"

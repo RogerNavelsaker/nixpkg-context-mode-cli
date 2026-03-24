@@ -1,24 +1,20 @@
 {
   "stubbed": false,
-  "upstream": {
-    "owner": "RogerNavelsaker",
-    "repo": "context-mode-mcp",
-    "tag": "v1.0.51",
-    "rev": "865fe6526ef255685cb65556238dcb8b41b5c63d",
-    "version": "1.0.51",
-    "hash": "sha256-2By9dJzej4cONy2LNrcXIJZbHS+73ozY94ZCOqdxBu4="
+  "source": {
+    "path": "upstream",
+    "version": "1.0.52-p1"
   },
   "package": {
     "revision": 1,
-    "version": "1.0.51-r1"
+    "version": "1.0.52-p1-r1"
   },
   "binary": {
-    "name": "context-mode-mcp",
-    "entrypoint": "bin/context-mode-mcp.mjs"
+    "name": "context-mode-cli",
+    "entrypoint": "bin/context-mode-cli.mjs"
   },
   "meta": {
-    "description": "Thin Nix package for the Context Mode MCP server",
-    "homepage": "https://github.com/RogerNavelsaker/context-mode-mcp#readme",
+    "description": "Thin Nix package for the Context Mode CLI bridge",
+    "homepage": "https://github.com/RogerNavelsaker/context-mode-cli#readme",
     "licenseSpdx": "Elastic-2.0"
   }
 }
