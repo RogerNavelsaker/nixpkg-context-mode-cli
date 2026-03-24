@@ -25,7 +25,7 @@ let
 in
 stdenv.mkDerivation {
   pname = manifest.binary.name;
-  version = manifest.upstream.version;
+  version = manifest.package.version or manifest.upstream.version;
   src = upstreamSrc;
 
   nativeBuildInputs = [

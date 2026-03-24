@@ -8,6 +8,10 @@
     "version": "1.0.51",
     "hash": "sha256-2By9dJzej4cONy2LNrcXIJZbHS+73ozY94ZCOqdxBu4="
   },
+  "package": {
+    "revision": 1,
+    "version": "1.0.51-r1"
+  },
   "binary": {
     "name": "context-mode-mcp",
     "entrypoint": "bin/context-mode-mcp.mjs"

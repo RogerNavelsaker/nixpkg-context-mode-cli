@@ -10,6 +10,7 @@ This repo should own only reproducible Nix packaging. It should not own Pi-speci
 - Fetches the tagged `context-mode-mcp` source archive from GitHub
 - Uses the package repo’s Bun lock surface with `bun2nix`
 - Wraps the server with Bun from the Nix store, so Bun does not need to be installed separately in Flox
+- Carries a package revision separate from upstream so Flox can detect packaging-only updates
 
 ## Files
 
